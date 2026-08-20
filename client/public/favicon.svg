@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
+  <rect width="100" height="100" rx="20" fill="#0D0E11" />
+  <circle cx="50" cy="50" r="42" fill="none" stroke="#C36B4E" stroke-width="2" stroke-dasharray="4,4" opacity="0.6"/>
+  <text x="50%" y="45%" text-anchor="middle" fill="#F5F4F0" font-family="'Playfair Display', serif" font-size="28" font-weight="700" letter-spacing="1">1522</text>
+  <text x="50%" y="70%" text-anchor="middle" fill="#C36B4E" font-family="'Manrope', sans-serif" font-size="9" font-weight="600" letter-spacing="3">MUMBAI</text>
+</svg>

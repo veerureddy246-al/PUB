@@ -1,0 +1,12 @@
+{
+  "name": "1522-mumbai-monorepo",
+  "version": "1.0.0",
+  "description": "1522 Bar & Kitchen Mumbai MERN Stack Application",
+  "scripts": {
+    "server": "npm --prefix server start",
+    "server:dev": "npm --prefix server run dev",
+    "client": "npm --prefix client run dev",
+    "client:build": "npm --prefix client run build",
+    "install:all": "npm install --prefix server && npm install --prefix client"
+  }
+}
