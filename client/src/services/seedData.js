@@ -793,7 +793,7 @@ export const initialMenuItems = [
     isGlutenFree: true,
     spiciness: 0,
     pairWith: "Mangalorean Ghee Roast or Lamb Sliders",
-    image: "https://images.unsplash.com/photo-1514362545857-3bc16c4c7d1b?auto=format&fit=crop&w=800&q=80",
+    image: "/images/drinks/smoked-cinnamon-old-fashioned.jpg",
     tags: ["Mixology Masterpiece", "Smoky & Bold"],
     available: true
   },
@@ -1240,7 +1240,7 @@ export const initialGalleryItems = [
     order: 19
   },
   {
-    image: "https://images.unsplash.com/photo-1514362545857-3bc16c4c7d1b?auto=format&fit=crop&w=1200&q=80",
+    image: "/images/drinks/smoked-cinnamon-old-fashioned.jpg",
     title: "The 1522 Mumbai Skyline Smoked Fig Old Fashioned",
     category: "Drinks",
     alt: "Signature Smoked Cocktail",

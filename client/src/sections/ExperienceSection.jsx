@@ -21,7 +21,7 @@ const experiences = [
     title: 'COCKTAILS',
     subtitle: 'Smoked Libations & Botanical Mixology',
     description: 'Bespoke cocktails crafted with indigenous infusions, wild jamun reductions, artisanal tonic mists, and glass cloches filled with fragrant applewood smoke.',
-    image: 'https://images.unsplash.com/photo-1514362545857-3bc16c4c7d1b?auto=format&fit=crop&w=1000&q=80',
+    image: '/images/drinks/smoked-cinnamon-old-fashioned.jpg',
     icon: Wine,
     highlights: ['35+ Signature Mixes', 'Rare Single Malt Vault', 'Smoked Fig Old Fashioned', 'Zero-Proof Elixirs'],
     colSpan: 'lg:col-span-5',

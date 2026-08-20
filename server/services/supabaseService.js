@@ -323,6 +323,8 @@ class SupabaseService {
           await supabase.from('menu_items').update({ image: '/images/drinks/smoked-rosemary-cocktail.jpg' }).ilike('name', '%Jamun%');
           // Update Espresso Martini image in Supabase
           await supabase.from('menu_items').update({ image: '/images/drinks/espresso-martini.jpg' }).ilike('name', '%Espresso%');
+          // Update Old Fashioned image in Supabase
+          await supabase.from('menu_items').update({ image: '/images/drinks/smoked-cinnamon-old-fashioned.jpg' }).ilike('name', '%Old Fashioned%');
         }
       } catch (e) {
         console.warn('[Supabase] Menu seed error:', e.message);
@@ -346,9 +348,10 @@ class SupabaseService {
           await supabase.from('gallery_items').insert(rows);
           console.log(`[Supabase] Successfully seeded ${rows.length} gallery items.`);
         } else if (!error) {
-          // Update Jamun / Smoked Rosemary and Espresso Martini in Supabase gallery
+          // Update Jamun, Espresso, and Old Fashioned in Supabase gallery
           await supabase.from('gallery_items').update({ image_url: '/images/drinks/smoked-rosemary-cocktail.jpg' }).ilike('title', '%Jamun%');
           await supabase.from('gallery_items').update({ image_url: '/images/drinks/espresso-martini.jpg', title: 'Handcrafted Cold Brew Nitrogen Espresso Martini' }).ilike('title', '%Espresso%');
+          await supabase.from('gallery_items').update({ image_url: '/images/drinks/smoked-cinnamon-old-fashioned.jpg' }).ilike('title', '%Old Fashioned%');
         }
       } catch (e) {
         console.warn('[Supabase] Gallery seed error:', e.message);

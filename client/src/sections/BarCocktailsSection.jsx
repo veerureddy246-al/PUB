@@ -11,7 +11,7 @@ const signatureCocktails = [
     description: "Our crowning libation. Aged Kentucky bourbon infused with roasted cinnamon bark, organic fig reduction, and aromatic bitters, presented tableside under a glass cloche filled with aromatic applewood smoke.",
     ingredients: ["Kentucky Bourbon", "Roasted Cinnamon Bark", "Wild Fig Reduction", "Angostura Bitters", "Applewood Smoke"],
     flavorProfile: "Smoky, Rich, Velvety",
-    image: "https://images.unsplash.com/photo-1514362545857-3bc16c4c7d1b?auto=format&fit=crop&w=800&q=80"
+    image: "/images/drinks/smoked-cinnamon-old-fashioned.jpg"
   },
   {
     name: "Jamun & Botanical Gin Fizz",
