@@ -329,6 +329,8 @@ class SupabaseService {
           await supabase.from('menu_items').update({ image: '/images/drinks/smoked-cinnamon-old-fashioned.jpg' }).ilike('name', '%Old Fashioned%');
           // Update Dal 1522 image in Supabase
           await supabase.from('menu_items').update({ image: 'https://images.unsplash.com/photo-1585937421612-70a008356fbe?auto=format&fit=crop&w=800&q=80' }).ilike('image', '%1546833999%');
+          // Update Chicken Ghee Roast image in Supabase
+          await supabase.from('menu_items').update({ image: '/images/food/chicken-ghee-roast.jpg' }).ilike('name', '%Ghee Roast%');
         }
       } catch (e) {
         console.warn('[Supabase] Menu seed error:', e.message);
@@ -360,6 +362,8 @@ class SupabaseService {
           await supabase.from('gallery_items').delete().ilike('title', '%Vibrant Neon%');
           await supabase.from('gallery_items').delete().ilike('title', '%Twilight Terrace%');
 
+          // Update Chicken Ghee Roast in Supabase gallery
+          await supabase.from('gallery_items').update({ image_url: '/images/food/chicken-ghee-roast.jpg' }).ilike('title', '%Ghee Roast%');
           // Update all 4 cocktails in Supabase gallery
           await supabase.from('gallery_items').update({ image_url: '/images/drinks/botanical-gin-fizz.jpg' }).ilike('title', '%Jamun%');
           await supabase.from('gallery_items').update({ image_url: '/images/drinks/smoked-rosemary-cocktail.jpg' }).ilike('title', '%Blood Orange%');

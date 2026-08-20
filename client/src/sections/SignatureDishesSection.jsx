@@ -13,7 +13,7 @@ export const SignatureDishesSection = () => {
     subtitle: "The Legendary 1522 Heritage Creation",
     price: "₹645",
     description: "Tender succulently roasted chicken morsels steeped in crushed Byadgi red chilies, hand-roasted Kundapur coriander seeds, and pure clarified butter, finished with crisp curry leaves and served alongside steaming soft neer dosa.",
-    image: "https://images.unsplash.com/photo-1626777552726-4a6b54c97e46?auto=format&fit=crop&w=1200&q=80",
+    image: "/images/food/chicken-ghee-roast.jpg",
     tags: ["Legendary", "Kundapur Spices", "Pure Ghee", "Gluten-Free"],
     pairWith: "The 1522 Mumbai Skyline Smoked Old Fashioned"
   };

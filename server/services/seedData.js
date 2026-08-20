@@ -563,7 +563,7 @@ export const initialMenuItems = [
     isGlutenFree: true,
     spiciness: 2,
     pairWith: "Crisp Kori Rotti",
-    image: "https://images.unsplash.com/photo-1626777552726-4a6b54c97e46?auto=format&fit=crop&w=800&q=80",
+    image: "/images/food/chicken-ghee-roast.jpg",
     tags: ["Kori Rotti", "Kundapur Heritage"],
     available: true
   },
@@ -1152,7 +1152,7 @@ export const initialGalleryItems = [
   // FOOD & DRINK — 14 CURATED IMAGES
   // ==========================================
   {
-    image: "https://images.unsplash.com/photo-1626777552726-4a6b54c97e46?auto=format&fit=crop&w=1200&q=80",
+    image: "/images/food/chicken-ghee-roast.jpg",
     title: "Mangalorean Chicken Ghee Roast with Soft Neer Dosa",
     category: "Food",
     alt: "Signature Chicken Ghee Roast",
