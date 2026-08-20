@@ -37,7 +37,7 @@ export const SignatureDishesSection = () => {
       name: "Koliwada Prawns Crisp Bowl",
       price: "₹725",
       description: "Arabian Sea fresh tiger prawns marinated in coastal red pepper paste, ajwain, fried crisp with mint drizzle and lemon wedges.",
-      image: "https://images.unsplash.com/photo-1565557623262-b51c2513a641?auto=format&fit=crop&w=800&q=80",
+      image: "/images/food/koliwada-prawns.png",
       tag: "Coastal Classic"
     }
   ];

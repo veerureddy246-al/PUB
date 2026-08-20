@@ -156,7 +156,7 @@ export const initialMenuItems = [
     isGlutenFree: true,
     spiciness: 2,
     pairWith: "Crisp Sauvignon Blanc",
-    image: "https://images.unsplash.com/photo-1565557623262-b51c2513a641?auto=format&fit=crop&w=800&q=80",
+    image: "/images/food/koliwada-prawns.png",
     tags: ["Seafood", "Mumbai Street Classic"],
     available: true
   },
@@ -271,7 +271,7 @@ export const initialMenuItems = [
     isGlutenFree: true,
     spiciness: 2,
     pairWith: "Garlic Butter Naan",
-    image: "https://images.unsplash.com/photo-1565557623262-b51c2513a641?auto=format&fit=crop&w=800&q=80",
+    image: "/images/food/koliwada-prawns.png",
     tags: ["Tandoori Classic", "Bestseller"],
     available: true
   },
@@ -499,7 +499,7 @@ export const initialMenuItems = [
     isGlutenFree: true,
     spiciness: 1,
     pairWith: "Steamed Coconut Rice",
-    image: "https://images.unsplash.com/photo-1565557623262-b51c2513a641?auto=format&fit=crop&w=800&q=80",
+    image: "/images/food/koliwada-prawns.png",
     tags: ["Goan Mango", "Coastal Prawns"],
     available: true
   },
@@ -515,7 +515,7 @@ export const initialMenuItems = [
     isGlutenFree: true,
     spiciness: 2,
     pairWith: "Neer Dosa or Chapati",
-    image: "https://images.unsplash.com/photo-1565557623262-b51c2513a641?auto=format&fit=crop&w=800&q=80",
+    image: "/images/food/koliwada-prawns.png",
     tags: ["Coastal Masala", "Arabian Prawns"],
     available: true
   },
@@ -1176,7 +1176,7 @@ export const initialGalleryItems = [
     order: 11
   },
   {
-    image: "https://images.unsplash.com/photo-1565557623262-b51c2513a641?auto=format&fit=crop&w=1200&q=80",
+    image: "/images/food/koliwada-prawns.png",
     title: "Arabian Sea Butter Garlic Tiger Prawns",
     category: "Food",
     alt: "Fresh Prawn Seafood Dish",

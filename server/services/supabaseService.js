@@ -331,6 +331,8 @@ class SupabaseService {
           await supabase.from('menu_items').update({ image: 'https://images.unsplash.com/photo-1585937421612-70a008356fbe?auto=format&fit=crop&w=800&q=80' }).ilike('image', '%1546833999%');
           // Update Chicken Ghee Roast image in Supabase
           await supabase.from('menu_items').update({ image: '/images/food/chicken-ghee-roast.jpg' }).ilike('name', '%Ghee Roast%');
+          // Update Prawns image in Supabase
+          await supabase.from('menu_items').update({ image: '/images/food/koliwada-prawns.png' }).ilike('name', '%Prawn%');
         }
       } catch (e) {
         console.warn('[Supabase] Menu seed error:', e.message);
@@ -364,6 +366,8 @@ class SupabaseService {
 
           // Update Chicken Ghee Roast in Supabase gallery
           await supabase.from('gallery_items').update({ image_url: '/images/food/chicken-ghee-roast.jpg' }).ilike('title', '%Ghee Roast%');
+          // Update Prawns in Supabase gallery
+          await supabase.from('gallery_items').update({ image_url: '/images/food/koliwada-prawns.png' }).ilike('title', '%Prawn%');
           // Update all 4 cocktails in Supabase gallery
           await supabase.from('gallery_items').update({ image_url: '/images/drinks/botanical-gin-fizz.jpg' }).ilike('title', '%Jamun%');
           await supabase.from('gallery_items').update({ image_url: '/images/drinks/smoked-rosemary-cocktail.jpg' }).ilike('title', '%Blood Orange%');
