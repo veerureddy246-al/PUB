@@ -236,7 +236,7 @@ export const initialMenuItems = [
     isGlutenFree: true,
     spiciness: 0,
     pairWith: "Jeera Rice & Tandoori Roti",
-    image: "https://images.unsplash.com/photo-1546833999-b9f581a1996d?auto=format&fit=crop&w=800&q=80",
+    image: "https://images.unsplash.com/photo-1585937421612-70a008356fbe?auto=format&fit=crop&w=800&q=80",
     tags: ["Comfort", "Iconic Heritage"],
     available: true
   },
@@ -351,7 +351,7 @@ export const initialMenuItems = [
     isGlutenFree: true,
     spiciness: 3,
     pairWith: "Bajra Roti or Jeera Rice",
-    image: "https://images.unsplash.com/photo-1546833999-b9f581a1996d?auto=format&fit=crop&w=800&q=80",
+    image: "https://images.unsplash.com/photo-1585937421612-70a008356fbe?auto=format&fit=crop&w=800&q=80",
     tags: ["Rajasthani", "Smoked Spicy"],
     available: true
   },
@@ -399,7 +399,7 @@ export const initialMenuItems = [
     isGlutenFree: true,
     spiciness: 2,
     pairWith: "Tandoori Roti or Naan",
-    image: "https://images.unsplash.com/photo-1546833999-b9f581a1996d?auto=format&fit=crop&w=800&q=80",
+    image: "https://images.unsplash.com/photo-1585937421612-70a008356fbe?auto=format&fit=crop&w=800&q=80",
     tags: ["Bhuna Masala", "Heritage Mutton"],
     available: true
   },
@@ -679,7 +679,7 @@ export const initialMenuItems = [
     isGlutenFree: false,
     spiciness: 2,
     pairWith: "Amritsari Kulcha",
-    image: "https://images.unsplash.com/photo-1546833999-b9f581a1996d?auto=format&fit=crop&w=800&q=80",
+    image: "https://images.unsplash.com/photo-1585937421612-70a008356fbe?auto=format&fit=crop&w=800&q=80",
     tags: ["Peshawari", "Amritsari"],
     available: true
   },
@@ -1081,7 +1081,7 @@ export const initialOffers = [
 
 export const initialGalleryItems = [
   // ==========================================
-  // AMBIENCE — EXACTLY 10 IMAGES
+  // AMBIENCE — 8 CURATED IMAGES
   // ==========================================
   {
     image: "https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?auto=format&fit=crop&w=1200&q=80",
@@ -1116,20 +1116,12 @@ export const initialGalleryItems = [
     order: 4
   },
   {
-    image: "https://images.unsplash.com/photo-1566417713940-fe7c737a9ef2?auto=format&fit=crop&w=1200&q=80",
-    title: "Vibrant Neon & Ambient Sunset Mood Lighting",
-    category: "Ambience",
-    alt: "Colorful Pub Ambient Lighting",
-    featured: false,
-    order: 5
-  },
-  {
     image: "https://images.unsplash.com/photo-1572116469696-31de0f17cc34?auto=format&fit=crop&w=1200&q=80",
     title: "Artisanal Marble Cocktail Counter & Crystal Stemware",
     category: "Ambience",
     alt: "Premium Cocktail Bar Counter",
     featured: true,
-    order: 6
+    order: 5
   },
   {
     image: "https://images.unsplash.com/photo-1550966871-3ed3cdb5ed0c?auto=format&fit=crop&w=1200&q=80",
@@ -1137,15 +1129,7 @@ export const initialGalleryItems = [
     category: "Ambience",
     alt: "Elegant Restaurant Seating Area",
     featured: false,
-    order: 7
-  },
-  {
-    image: "https://images.unsplash.com/photo-1525610553991-2bede1a236e2?auto=format&fit=crop&w=1200&q=80",
-    title: "Twilight Terrace Dining with Cityscape Views",
-    category: "Ambience",
-    alt: "Rooftop Evening Dining Atmosphere",
-    featured: false,
-    order: 8
+    order: 6
   },
   {
     image: "https://images.unsplash.com/photo-1510812431401-41d2bd2722f3?auto=format&fit=crop&w=1200&q=80",
@@ -1153,7 +1137,7 @@ export const initialGalleryItems = [
     category: "Ambience",
     alt: "Bar Shelves and Atmospheric Lighting",
     featured: false,
-    order: 9
+    order: 7
   },
   {
     image: "https://images.unsplash.com/photo-1533105079780-92b9be482077?auto=format&fit=crop&w=1200&q=80",
@@ -1161,11 +1145,11 @@ export const initialGalleryItems = [
     category: "Ambience",
     alt: "Wide Premium Rooftop Lounge Atmosphere",
     featured: false,
-    order: 10
+    order: 8
   },
 
   // ==========================================
-  // FOOD & DRINK — EXACTLY 15 IMAGES
+  // FOOD & DRINK — 14 CURATED IMAGES
   // ==========================================
   {
     image: "https://images.unsplash.com/photo-1626777552726-4a6b54c97e46?auto=format&fit=crop&w=1200&q=80",
@@ -1173,7 +1157,7 @@ export const initialGalleryItems = [
     category: "Food",
     alt: "Signature Chicken Ghee Roast",
     featured: true,
-    order: 11
+    order: 9
   },
   {
     image: "https://images.unsplash.com/photo-1589302168068-964664d93dc0?auto=format&fit=crop&w=1200&q=80",
@@ -1181,7 +1165,7 @@ export const initialGalleryItems = [
     category: "Food",
     alt: "Premium Mangalorean Coastal Curry",
     featured: false,
-    order: 12
+    order: 10
   },
   {
     image: "https://images.unsplash.com/photo-1513104890138-7c749659a591?auto=format&fit=crop&w=1200&q=80",
@@ -1189,7 +1173,7 @@ export const initialGalleryItems = [
     category: "Food",
     alt: "Artisan Wood-Fired Sourdough Pizza",
     featured: true,
-    order: 13
+    order: 11
   },
   {
     image: "https://images.unsplash.com/photo-1565557623262-b51c2513a641?auto=format&fit=crop&w=1200&q=80",
@@ -1197,7 +1181,7 @@ export const initialGalleryItems = [
     category: "Food",
     alt: "Fresh Prawn Seafood Dish",
     featured: false,
-    order: 14
+    order: 12
   },
   {
     image: "https://images.unsplash.com/photo-1541696432-82c6da8ce7bf?auto=format&fit=crop&w=1200&q=80",
@@ -1205,7 +1189,7 @@ export const initialGalleryItems = [
     category: "Food",
     alt: "Premium Vegetarian Crystal Dim Sum",
     featured: true,
-    order: 15
+    order: 13
   },
   {
     image: "https://images.unsplash.com/photo-1599488615731-7e5c2823ff28?auto=format&fit=crop&w=1200&q=80",
@@ -1213,7 +1197,7 @@ export const initialGalleryItems = [
     category: "Food",
     alt: "Artisanal Restaurant Starter",
     featured: false,
-    order: 16
+    order: 14
   },
   {
     image: "https://images.unsplash.com/photo-1562967914-608f82629710?auto=format&fit=crop&w=1200&q=80",
@@ -1221,7 +1205,7 @@ export const initialGalleryItems = [
     category: "Food",
     alt: "Crispy Chicken Starter",
     featured: false,
-    order: 17
+    order: 15
   },
   {
     image: "https://images.unsplash.com/photo-1534422298391-e4f8c172dddb?auto=format&fit=crop&w=1200&q=80",
@@ -1229,15 +1213,7 @@ export const initialGalleryItems = [
     category: "Food",
     alt: "Seafood Starter Crisp Calamari",
     featured: false,
-    order: 18
-  },
-  {
-    image: "https://images.unsplash.com/photo-1546833999-b9f581a1996d?auto=format&fit=crop&w=1200&q=80",
-    title: "Slow-Simmered 24-Hour Dal 1522 & Saffron Jeera Rice",
-    category: "Food",
-    alt: "Premium Plated Main Course",
-    featured: true,
-    order: 19
+    order: 16
   },
   {
     image: "/images/drinks/smoked-cinnamon-old-fashioned.jpg",
@@ -1245,7 +1221,7 @@ export const initialGalleryItems = [
     category: "Drinks",
     alt: "Signature Smoked Cocktail",
     featured: true,
-    order: 20
+    order: 17
   },
   {
     image: "/images/drinks/botanical-gin-fizz.jpg",
@@ -1253,7 +1229,7 @@ export const initialGalleryItems = [
     category: "Drinks",
     alt: "Colorful Botanical Cocktail",
     featured: true,
-    order: 21
+    order: 18
   },
   {
     image: "/images/drinks/smoked-rosemary-cocktail.jpg",
@@ -1261,7 +1237,7 @@ export const initialGalleryItems = [
     category: "Drinks",
     alt: "Premium Zero-Proof Mocktail",
     featured: false,
-    order: 22
+    order: 19
   },
   {
     image: "/images/drinks/espresso-martini.jpg",
@@ -1269,7 +1245,7 @@ export const initialGalleryItems = [
     category: "Drinks",
     alt: "Cold Brew Espresso Martini with Coffee Beans",
     featured: true,
-    order: 23
+    order: 20
   },
   {
     image: "https://images.unsplash.com/photo-1579372786545-d24232daf58c?auto=format&fit=crop&w=1200&q=80",
@@ -1277,7 +1253,7 @@ export const initialGalleryItems = [
     category: "Food",
     alt: "Decadent Restaurant Dessert",
     featured: false,
-    order: 24
+    order: 21
   },
   {
     image: "https://images.unsplash.com/photo-1527661591475-527312dd65f5?auto=format&fit=crop&w=1200&q=80",
@@ -1285,7 +1261,7 @@ export const initialGalleryItems = [
     category: "Drinks",
     alt: "Signature Food and Cocktail Presentation",
     featured: true,
-    order: 25
+    order: 22
   }
 ];
 

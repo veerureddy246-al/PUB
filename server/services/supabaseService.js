@@ -327,13 +327,15 @@ class SupabaseService {
           await supabase.from('menu_items').update({ image: '/images/drinks/espresso-martini.jpg' }).ilike('name', '%Espresso%');
           // Update Old Fashioned image in Supabase
           await supabase.from('menu_items').update({ image: '/images/drinks/smoked-cinnamon-old-fashioned.jpg' }).ilike('name', '%Old Fashioned%');
+          // Update Dal 1522 image in Supabase
+          await supabase.from('menu_items').update({ image: 'https://images.unsplash.com/photo-1585937421612-70a008356fbe?auto=format&fit=crop&w=800&q=80' }).ilike('image', '%1546833999%');
         }
       } catch (e) {
         console.warn('[Supabase] Menu seed error:', e.message);
       }
     }
 
-    // 2. Seed & Sync Gallery Items (25 items)
+    // 2. Seed & Sync Gallery Items
     if (this.tablesExist.gallery_items) {
       try {
         const { count, error } = await supabase.from('gallery_items').select('*', { count: 'exact', head: true });
@@ -350,6 +352,14 @@ class SupabaseService {
           await supabase.from('gallery_items').insert(rows);
           console.log(`[Supabase] Successfully seeded ${rows.length} gallery items.`);
         } else if (!error) {
+          // Delete the 3 removed photos (Santorini sea view, Aquarium fish, Steel Dal thali)
+          await supabase.from('gallery_items').delete().ilike('image_url', '%1525610553991%');
+          await supabase.from('gallery_items').delete().ilike('image_url', '%1566417713940%');
+          await supabase.from('gallery_items').delete().ilike('image_url', '%1546833999%');
+          await supabase.from('gallery_items').delete().ilike('title', '%Dal 1522%');
+          await supabase.from('gallery_items').delete().ilike('title', '%Vibrant Neon%');
+          await supabase.from('gallery_items').delete().ilike('title', '%Twilight Terrace%');
+
           // Update all 4 cocktails in Supabase gallery
           await supabase.from('gallery_items').update({ image_url: '/images/drinks/botanical-gin-fizz.jpg' }).ilike('title', '%Jamun%');
           await supabase.from('gallery_items').update({ image_url: '/images/drinks/smoked-rosemary-cocktail.jpg' }).ilike('title', '%Blood Orange%');
