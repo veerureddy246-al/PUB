@@ -809,7 +809,7 @@ export const initialMenuItems = [
     isGlutenFree: true,
     spiciness: 0,
     pairWith: "Truffle Edamame Dimsum",
-    image: "https://images.unsplash.com/photo-1551024709-8f23befc6f87?auto=format&fit=crop&w=800&q=80",
+    image: "/images/drinks/smoked-rosemary-cocktail.jpg",
     tags: ["Rooftop Sunset", "Floral & Crisp"],
     available: true
   },
@@ -1248,7 +1248,7 @@ export const initialGalleryItems = [
     order: 20
   },
   {
-    image: "https://images.unsplash.com/photo-1551024709-8f23befc6f87?auto=format&fit=crop&w=1200&q=80",
+    image: "/images/drinks/smoked-rosemary-cocktail.jpg",
     title: "Jamun & Botanical Gin Fizz with Pink Himalayan Rim",
     category: "Drinks",
     alt: "Colorful Botanical Cocktail",

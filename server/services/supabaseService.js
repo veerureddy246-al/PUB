@@ -294,7 +294,7 @@ class SupabaseService {
     if (!isSupabaseConfigured()) return;
     await this.checkTables();
 
-    // 1. Seed Menu Items
+    // 1. Seed & Sync Menu Items
     if (this.tablesExist.menu_items) {
       try {
         const { count, error } = await supabase.from('menu_items').select('*', { count: 'exact', head: true });
@@ -318,13 +318,18 @@ class SupabaseService {
           }));
           await supabase.from('menu_items').insert(rows);
           console.log(`[Supabase] Successfully seeded ${rows.length} menu items.`);
+        } else if (!error) {
+          // Update Jamun & Gin Fizz image in Supabase
+          await supabase.from('menu_items').update({ image: '/images/drinks/smoked-rosemary-cocktail.jpg' }).ilike('name', '%Jamun%');
+          // Update Espresso Martini image in Supabase
+          await supabase.from('menu_items').update({ image: '/images/drinks/espresso-martini.jpg' }).ilike('name', '%Espresso%');
         }
       } catch (e) {
         console.warn('[Supabase] Menu seed error:', e.message);
       }
     }
 
-    // 2. Seed Gallery Items (25 items)
+    // 2. Seed & Sync Gallery Items (25 items)
     if (this.tablesExist.gallery_items) {
       try {
         const { count, error } = await supabase.from('gallery_items').select('*', { count: 'exact', head: true });
@@ -340,6 +345,10 @@ class SupabaseService {
           }));
           await supabase.from('gallery_items').insert(rows);
           console.log(`[Supabase] Successfully seeded ${rows.length} gallery items.`);
+        } else if (!error) {
+          // Update Jamun / Smoked Rosemary and Espresso Martini in Supabase gallery
+          await supabase.from('gallery_items').update({ image_url: '/images/drinks/smoked-rosemary-cocktail.jpg' }).ilike('title', '%Jamun%');
+          await supabase.from('gallery_items').update({ image_url: '/images/drinks/espresso-martini.jpg', title: 'Handcrafted Cold Brew Nitrogen Espresso Martini' }).ilike('title', '%Espresso%');
         }
       } catch (e) {
         console.warn('[Supabase] Gallery seed error:', e.message);

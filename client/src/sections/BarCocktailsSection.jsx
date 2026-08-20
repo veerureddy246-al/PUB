@@ -20,7 +20,7 @@ const signatureCocktails = [
     description: "An homage to Indian botanicals. Artisanal craft gin muddled with wild monsoon jamun fruit, kaffir lime leaves, and elderflower liqueur, topped with elderflower tonic mist and pink Himalayan crystal salt.",
     ingredients: ["Artisanal Craft Gin", "Wild Jamun Pulp", "Elderflower Liqueur", "Kaffir Lime", "Tonic Mist"],
     flavorProfile: "Floral, Tart, Effervescent",
-    image: "https://images.unsplash.com/photo-1551024709-8f23befc6f87?auto=format&fit=crop&w=800&q=80"
+    image: "/images/drinks/smoked-rosemary-cocktail.jpg"
   },
   {
     name: "Smoked Kokum & Tequila Picante",
