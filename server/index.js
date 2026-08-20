@@ -24,12 +24,10 @@ dotenv.config();
 const app = express();
 const PORT = process.env.PORT || 5000;
 
-// Initialize Database connection and auto-seeding
+// Initialize Database connections and auto-seeding
 (async () => {
-  const connected = await connectDB();
-  if (connected) {
-    await dataStore.seedDatabaseIfConnected();
-  }
+  await connectDB();
+  await dataStore.seedDatabaseIfConnected();
 })();
 
 // Security Middleware: Helmet

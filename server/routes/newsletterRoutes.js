@@ -11,6 +11,8 @@ router.route('/')
   .get(getSubscribers)
   .post(subscribeNewsletter);
 
+router.post('/subscribe', subscribeNewsletter);
+
 router.route('/:id')
   .delete(deleteSubscriber);
 

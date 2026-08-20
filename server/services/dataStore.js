@@ -6,7 +6,9 @@ import Offer from '../models/Offer.js';
 import GalleryItem from '../models/GalleryItem.js';
 import NewsletterSubscriber from '../models/NewsletterSubscriber.js';
 import ContactMessage from '../models/ContactMessage.js';
+import Inquiry from '../models/Inquiry.js';
 import { getDBStatus } from '../config/db.js';
+import { supabaseService } from './supabaseService.js';
 
 // In-Memory Backing Stores
 let memoryReservations = [
@@ -103,6 +105,7 @@ let memoryMessages = [
   }
 ];
 
+let memoryInquiries = [];
 let memoryReviews = [...initialReviews];
 
 export const dataStore = {
@@ -165,6 +168,14 @@ export const dataStore = {
       updatedAt: new Date()
     };
 
+    // 1. Try Supabase
+    const spCreated = await supabaseService.createReservation(newReservationData);
+    if (spCreated) {
+      memoryReservations.unshift(spCreated);
+      return spCreated;
+    }
+
+    // 2. Try MongoDB
     if (getDBStatus()) {
       try {
         const created = await Reservation.create(newReservationData);
@@ -224,6 +235,11 @@ export const dataStore = {
   // 2. MENU ITEMS
   async getAllMenuItems(query = {}) {
     const { category, dietary, search, available } = query;
+    // 1. Try Supabase
+    const spItems = await supabaseService.getMenuItems(query);
+    if (spItems && spItems.length > 0) return spItems;
+
+    // 2. Try MongoDB if connected
     if (getDBStatus()) {
       try {
         const filter = {};
@@ -342,6 +358,11 @@ export const dataStore = {
 
   // 3. EVENTS
   async getAllEvents(includeInactive = false) {
+    // 1. Try Supabase
+    const spEvents = await supabaseService.getEvents();
+    if (spEvents && spEvents.length > 0) return spEvents;
+
+    // 2. Try MongoDB if connected
     if (getDBStatus()) {
       try {
         const filter = includeInactive ? {} : { active: true };
@@ -430,6 +451,11 @@ export const dataStore = {
 
   // 4. OFFERS & SPECIAL NEWS
   async getAllOffers(includeExpired = false) {
+    // 1. Try Supabase
+    const spOffers = await supabaseService.getOffers();
+    if (spOffers && spOffers.length > 0) return spOffers;
+
+    // 2. Try MongoDB if connected
     const now = new Date();
     if (getDBStatus()) {
       try {
@@ -518,6 +544,11 @@ export const dataStore = {
 
   // 5. GALLERY ITEMS
   async getAllGalleryItems(category = 'All') {
+    // 1. Try Supabase
+    const spGallery = await supabaseService.getGalleryItems({ category });
+    if (spGallery && spGallery.length > 0) return spGallery;
+
+    // 2. Try MongoDB if connected
     if (getDBStatus()) {
       try {
         let filter = {};
@@ -743,8 +774,96 @@ export const dataStore = {
     return memoryMessages.length < lenBefore;
   },
 
-  // 8. AUTO-SEEDER (Runs when MongoDB is connected and collections are empty)
+  // 8. PRIVATE DINING & EVENT INQUIRIES
+  async getAllInquiries(status = null) {
+    if (getDBStatus()) {
+      try {
+        const filter = status ? { status } : {};
+        return await Inquiry.find(filter).sort({ createdAt: -1 });
+      } catch (err) {
+        console.warn('DB error getAllInquiries:', err.message);
+      }
+    }
+    if (status) return memoryInquiries.filter(i => i.status === status);
+    return memoryInquiries;
+  },
+
+  async getInquiryById(id) {
+    if (getDBStatus()) {
+      try {
+        return await Inquiry.findById(id);
+      } catch (err) {
+        console.warn('DB error getInquiryById:', err.message);
+      }
+    }
+    return memoryInquiries.find(i => i._id === id) || null;
+  },
+
+  async createInquiry(data) {
+    // 1. Try Supabase
+    await supabaseService.createInquiry(data);
+
+    // 2. Try MongoDB
+    if (getDBStatus()) {
+      try {
+        return await Inquiry.create(data);
+      } catch (err) {
+        console.warn('DB error createInquiry:', err.message);
+      }
+    }
+    const newInquiry = {
+      _id: `inq_${Date.now()}`,
+      status: 'new',
+      ...data,
+      createdAt: new Date(),
+      updatedAt: new Date()
+    };
+    memoryInquiries.unshift(newInquiry);
+    return newInquiry;
+  },
+
+  async updateInquiryStatus(id, status) {
+    if (getDBStatus()) {
+      try {
+        const updated = await Inquiry.findByIdAndUpdate(id, { status }, { new: true });
+        if (updated) return updated;
+      } catch (err) {
+        console.warn('DB error updateInquiryStatus:', err.message);
+      }
+    }
+    const inq = memoryInquiries.find(i => i._id === id);
+    if (inq) {
+      inq.status = status;
+      inq.updatedAt = new Date();
+      return inq;
+    }
+    return null;
+  },
+
+  async deleteInquiry(id) {
+    if (getDBStatus()) {
+      try {
+        const deleted = await Inquiry.findByIdAndDelete(id);
+        if (deleted) return true;
+      } catch (err) {
+        console.warn('DB error deleteInquiry:', err.message);
+      }
+    }
+    const lenBefore = memoryInquiries.length;
+    memoryInquiries = memoryInquiries.filter(i => i._id !== id);
+    return memoryInquiries.length < lenBefore;
+  },
+
+  // 9. AUTO-SEEDER (Runs on startup for Supabase and MongoDB)
   async seedDatabaseIfConnected() {
+    // 1. Supabase auto-sync and seed
+    try {
+      await supabaseService.seedIfEmpty();
+    } catch (err) {
+      console.warn('[Supabase] Sync note:', err.message);
+    }
+
+    // 2. MongoDB auto-sync if connected
     if (!getDBStatus()) return;
     try {
       const menuCount = await MenuItem.countDocuments();
