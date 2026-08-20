@@ -38,7 +38,7 @@ const signatureCocktails = [
     description: "Single-origin Chikmagalur dark roast slow-steeped for 16 hours, premium vanilla vodka, coffee liqueur, shaken vigorously to create a velvety nitrogen crema, dusted with 70% dark cocoa.",
     ingredients: ["Chikmagalur Cold Brew", "Vanilla Infused Vodka", "Kahlúa Coffee Liqueur", "Nitrogen Foam", "Shaved Dark Cocoa"],
     flavorProfile: "Bold, Roasted, Silky",
-    image: "https://images.unsplash.com/photo-1578762560042-46ad127c95ea?auto=format&fit=crop&w=800&q=80"
+    image: "/images/drinks/espresso-martini.jpg"
   }
 ];
 

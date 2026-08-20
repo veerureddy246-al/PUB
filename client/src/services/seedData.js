@@ -841,7 +841,7 @@ export const initialMenuItems = [
     isGlutenFree: true,
     spiciness: 0,
     pairWith: "Nutella Cheesecake",
-    image: "https://images.unsplash.com/photo-1578762560042-46ad127c95ea?auto=format&fit=crop&w=800&q=80",
+    image: "/images/drinks/espresso-martini.jpg",
     tags: ["Nightcap", "Energizing"],
     available: true
   },
@@ -1264,11 +1264,11 @@ export const initialGalleryItems = [
     order: 22
   },
   {
-    image: "https://images.unsplash.com/photo-1560512823-829485b8bf24?auto=format&fit=crop&w=1200&q=80",
-    title: "Flight of Handcrafted Artisanal Sundowner Cocktails",
+    image: "/images/drinks/espresso-martini.jpg",
+    title: "Handcrafted Cold Brew Nitrogen Espresso Martini",
     category: "Drinks",
-    alt: "Multiple Craft Cocktails on Bar Counter",
-    featured: false,
+    alt: "Cold Brew Espresso Martini with Coffee Beans",
+    featured: true,
     order: 23
   },
   {
