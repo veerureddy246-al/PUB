@@ -18,11 +18,11 @@ export const BrandStorySection = () => {
           <div className="lg:col-span-6 relative">
             <div className="relative z-10 rounded-3xl overflow-hidden border border-stone-700/80 shadow-2xl group">
               <img
-                src="https://images.unsplash.com/photo-1543007630-9710e4a00a20?auto=format&fit=crop&w=1200&q=80"
+                src="https://images.unsplash.com/photo-1543007630-9710e4a00a20?auto=format&fit=crop&w=1200&q=85"
                 alt="1522 Mumbai Rooftop Experience and Architecture"
-                className="w-full h-[420px] sm:h-[500px] object-cover object-center img-editorial filter contrast-[1.08] brightness-[0.92]"
+                className="w-full h-[420px] sm:h-[500px] object-cover object-center img-editorial filter contrast-[1.05] brightness-[1.02] saturate-[1.08]"
               />
-              <div className="absolute inset-0 bg-gradient-to-t from-charcoal-950/95 via-charcoal-950/30 to-transparent" />
+              <div className="absolute inset-0 bg-gradient-to-t from-charcoal-950/80 via-transparent to-transparent" />
 
               {/* Bottom Editorial Caption */}
               <div className="absolute bottom-6 left-6 right-6 p-5 rounded-2xl bg-charcoal-900/90 border border-stone-700/80 backdrop-blur-md">
