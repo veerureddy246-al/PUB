@@ -20,7 +20,7 @@ const signatureCocktails = [
     description: "An homage to Indian botanicals. Artisanal craft gin muddled with wild monsoon jamun fruit, kaffir lime leaves, and elderflower liqueur, topped with elderflower tonic mist and pink Himalayan crystal salt.",
     ingredients: ["Artisanal Craft Gin", "Wild Jamun Pulp", "Elderflower Liqueur", "Kaffir Lime", "Tonic Mist"],
     flavorProfile: "Floral, Tart, Effervescent",
-    image: "/images/drinks/smoked-rosemary-cocktail.jpg"
+    image: "/images/drinks/botanical-gin-fizz.jpg"
   },
   {
     name: "Smoked Kokum & Tequila Picante",
@@ -29,7 +29,7 @@ const signatureCocktails = [
     description: "100% Blue Agave Reposado tequila shaken with sun-dried coastal kokum extract, bird's eye chili syrup, fresh lime juice, agave nectar, and black volcanic salt rim.",
     ingredients: ["100% Blue Agave Tequila", "Artisanal Kokum Extract", "Bird's Eye Chili", "Fresh Lime", "Volcanic Salt"],
     flavorProfile: "Spicy, Tangy, Earthy",
-    image: "https://images.unsplash.com/photo-1536935338788-846bb9981813?auto=format&fit=crop&w=800&q=80"
+    image: "/images/drinks/smoked-rosemary-cocktail.jpg"
   },
   {
     name: "Cold Brew Espresso Nitrogen Martini",

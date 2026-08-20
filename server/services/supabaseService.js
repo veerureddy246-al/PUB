@@ -320,7 +320,9 @@ class SupabaseService {
           console.log(`[Supabase] Successfully seeded ${rows.length} menu items.`);
         } else if (!error) {
           // Update Jamun & Gin Fizz image in Supabase
-          await supabase.from('menu_items').update({ image: '/images/drinks/smoked-rosemary-cocktail.jpg' }).ilike('name', '%Jamun%');
+          await supabase.from('menu_items').update({ image: '/images/drinks/botanical-gin-fizz.jpg' }).ilike('name', '%Jamun%');
+          // Update Smoked Kokum image in Supabase
+          await supabase.from('menu_items').update({ image: '/images/drinks/smoked-rosemary-cocktail.jpg' }).ilike('name', '%Kokum%');
           // Update Espresso Martini image in Supabase
           await supabase.from('menu_items').update({ image: '/images/drinks/espresso-martini.jpg' }).ilike('name', '%Espresso%');
           // Update Old Fashioned image in Supabase
@@ -348,8 +350,9 @@ class SupabaseService {
           await supabase.from('gallery_items').insert(rows);
           console.log(`[Supabase] Successfully seeded ${rows.length} gallery items.`);
         } else if (!error) {
-          // Update Jamun, Espresso, and Old Fashioned in Supabase gallery
-          await supabase.from('gallery_items').update({ image_url: '/images/drinks/smoked-rosemary-cocktail.jpg' }).ilike('title', '%Jamun%');
+          // Update all 4 cocktails in Supabase gallery
+          await supabase.from('gallery_items').update({ image_url: '/images/drinks/botanical-gin-fizz.jpg' }).ilike('title', '%Jamun%');
+          await supabase.from('gallery_items').update({ image_url: '/images/drinks/smoked-rosemary-cocktail.jpg' }).ilike('title', '%Blood Orange%');
           await supabase.from('gallery_items').update({ image_url: '/images/drinks/espresso-martini.jpg', title: 'Handcrafted Cold Brew Nitrogen Espresso Martini' }).ilike('title', '%Espresso%');
           await supabase.from('gallery_items').update({ image_url: '/images/drinks/smoked-cinnamon-old-fashioned.jpg' }).ilike('title', '%Old Fashioned%');
         }

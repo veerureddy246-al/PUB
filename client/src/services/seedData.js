@@ -809,7 +809,7 @@ export const initialMenuItems = [
     isGlutenFree: true,
     spiciness: 0,
     pairWith: "Truffle Edamame Dimsum",
-    image: "/images/drinks/smoked-rosemary-cocktail.jpg",
+    image: "/images/drinks/botanical-gin-fizz.jpg",
     tags: ["Rooftop Sunset", "Floral & Crisp"],
     available: true
   },
@@ -825,7 +825,7 @@ export const initialMenuItems = [
     isGlutenFree: true,
     spiciness: 1,
     pairWith: "Koliwada Prawns",
-    image: "https://images.unsplash.com/photo-1536935338788-846bb9981813?auto=format&fit=crop&w=800&q=80",
+    image: "/images/drinks/smoked-rosemary-cocktail.jpg",
     tags: ["Spicy & Tangy", "Signature"],
     available: true
   },
@@ -1248,7 +1248,7 @@ export const initialGalleryItems = [
     order: 20
   },
   {
-    image: "/images/drinks/smoked-rosemary-cocktail.jpg",
+    image: "/images/drinks/botanical-gin-fizz.jpg",
     title: "Jamun & Botanical Gin Fizz with Pink Himalayan Rim",
     category: "Drinks",
     alt: "Colorful Botanical Cocktail",
@@ -1256,7 +1256,7 @@ export const initialGalleryItems = [
     order: 21
   },
   {
-    image: "https://images.unsplash.com/photo-1536935338788-846bb9981813?auto=format&fit=crop&w=1200&q=80",
+    image: "/images/drinks/smoked-rosemary-cocktail.jpg",
     title: "Artisanal Blood Orange & Elderflower Zero-Proof Spritz",
     category: "Drinks",
     alt: "Premium Zero-Proof Mocktail",
