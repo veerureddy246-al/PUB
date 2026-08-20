@@ -34,6 +34,14 @@ const galleryItemSchema = new mongoose.Schema(
       type: Boolean,
       default: false,
     },
+    published: {
+      type: Boolean,
+      default: true,
+    },
+    archived: {
+      type: Boolean,
+      default: false,
+    },
     order: {
       type: Number,
       default: 0,

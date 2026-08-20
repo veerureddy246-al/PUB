@@ -34,6 +34,14 @@ const offerSchema = new mongoose.Schema(
       type: Boolean,
       default: true,
     },
+    published: {
+      type: Boolean,
+      default: true,
+    },
+    archived: {
+      type: Boolean,
+      default: false,
+    },
     badge: {
       type: String,
       default: 'Active Ritual',

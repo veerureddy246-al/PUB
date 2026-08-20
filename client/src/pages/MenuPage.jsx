@@ -43,18 +43,25 @@ export const MenuPage = () => {
   const fetchMenuItems = async () => {
     setLoading(true);
     try {
-      // Fetch all menu items first to ensure complete client-side strict partition
       const allItems = await menuService.getItems('all');
       let filtered = (allItems || []).filter((item) => {
+        if (item.published === false || item.archived === true) return false;
+        const cat = (item.category || '').toLowerCase();
         if (menuType === 'drinks') {
           return (
-            item.category === 'Cocktails' ||
-            item.category === 'Beer' ||
-            item.category === 'Wine' ||
-            item.category === 'Non-Alcoholic'
+            cat === 'cocktails' ||
+            cat === 'beer' ||
+            cat === 'wine' ||
+            cat === 'non-alcoholic' ||
+            cat === 'drinks' ||
+            cat === 'craft-cocktails' ||
+            cat === 'single-malts-wines'
           );
         } else {
-          return item.category === 'Food';
+          return (
+            cat === 'food' ||
+            !['cocktails', 'beer', 'wine', 'non-alcoholic', 'drinks', 'craft-cocktails', 'single-malts-wines'].includes(cat)
+          );
         }
       });
 
@@ -221,6 +228,16 @@ export const MenuPage = () => {
       ];
 
       const visibleGroups = foodGroups.filter((g) => g.items.length > 0);
+      const matchedItemIds = new Set(visibleGroups.flatMap(g => g.items.map(i => i._id || i.name)));
+      const otherFoodItems = items.filter(i => !matchedItemIds.has(i._id || i.name));
+      if (otherFoodItems.length > 0) {
+        visibleGroups.push({
+          id: 'food-curated-creations',
+          categoryTitle: 'CHEF SPECIALS & CURATIONS',
+          subTitle: 'NEW CREATIONS',
+          items: otherFoodItems,
+        });
+      }
       if (visibleGroups.length > 0) return visibleGroups;
 
       return [

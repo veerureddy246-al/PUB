@@ -51,6 +51,18 @@ const menuItemSchema = new mongoose.Schema(
       type: Boolean,
       default: true,
     },
+    published: {
+      type: Boolean,
+      default: true,
+    },
+    archived: {
+      type: Boolean,
+      default: false,
+    },
+    sortOrder: {
+      type: Number,
+      default: 0,
+    },
     featured: {
       type: Boolean,
       default: false,

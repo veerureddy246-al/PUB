@@ -2,12 +2,17 @@ import { dataStore } from '../services/dataStore.js';
 
 export const getOffers = async (req, res, next) => {
   try {
-    const { includeExpired } = req.query;
-    const offers = await dataStore.getAllOffers(includeExpired === 'true');
+    const { includeExpired, published, archived, includeArchived } = req.query;
+    const offers = await dataStore.getAllOffers({
+      includeExpired: includeExpired === 'true' || includeExpired === true,
+      published,
+      archived,
+      includeArchived: includeArchived === 'true' || includeArchived === true,
+    });
     res.json({
       success: true,
       count: offers.length,
-      data: offers
+      data: offers,
     });
   } catch (error) {
     next(error);
@@ -22,13 +27,13 @@ export const getOfferById = async (req, res, next) => {
     if (!offer) {
       return res.status(404).json({
         success: false,
-        message: 'Offer not found.'
+        message: 'Offer not found.',
       });
     }
 
     res.json({
       success: true,
-      data: offer
+      data: offer,
     });
   } catch (error) {
     next(error);
@@ -37,12 +42,12 @@ export const getOfferById = async (req, res, next) => {
 
 export const createOffer = async (req, res, next) => {
   try {
-    const { title, subtitle, description, image, startDate, endDate, active, badge, timing, terms } = req.body;
+    const { title, subtitle, description, image, startDate, endDate, active, badge, timing, terms, published } = req.body;
 
     if (!title || !description || !endDate) {
       return res.status(400).json({
         success: false,
-        message: 'Validation failed: title, description, and endDate are required.'
+        message: 'Validation failed: title, description, and endDate are required.',
       });
     }
 
@@ -50,7 +55,7 @@ export const createOffer = async (req, res, next) => {
     if (isNaN(end.getTime())) {
       return res.status(400).json({
         success: false,
-        message: 'Validation failed: invalid endDate format.'
+        message: 'Validation failed: invalid endDate format.',
       });
     }
 
@@ -62,15 +67,17 @@ export const createOffer = async (req, res, next) => {
       startDate: startDate ? new Date(startDate) : new Date(),
       endDate: end,
       active: active !== undefined ? active : true,
+      published: published !== undefined ? published : true,
+      archived: false,
       badge: badge || 'Special Offer',
       timing: timing || '',
-      terms: terms || ''
+      terms: terms || '',
     });
 
     res.status(201).json({
       success: true,
       message: 'Offer created successfully.',
-      data: newOffer
+      data: newOffer,
     });
   } catch (error) {
     next(error);
@@ -85,14 +92,14 @@ export const updateOffer = async (req, res, next) => {
     if (!updated) {
       return res.status(404).json({
         success: false,
-        message: 'Offer not found.'
+        message: 'Offer not found.',
       });
     }
 
     res.json({
       success: true,
       message: 'Offer updated successfully.',
-      data: updated
+      data: updated,
     });
   } catch (error) {
     next(error);
@@ -102,18 +109,87 @@ export const updateOffer = async (req, res, next) => {
 export const deleteOffer = async (req, res, next) => {
   try {
     const { id } = req.params;
-    const deleted = await dataStore.deleteOffer(id);
+    const updated = await dataStore.updateOffer(id, { archived: true, published: false, active: false });
 
-    if (!deleted) {
+    if (!updated) {
       return res.status(404).json({
         success: false,
-        message: 'Offer not found or already removed.'
+        message: 'Offer not found or already removed.',
       });
     }
 
     res.json({
       success: true,
-      message: 'Offer deleted successfully.'
+      message: 'Offer archived successfully.',
+      data: updated,
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const publishOffer = async (req, res, next) => {
+  try {
+    const { id } = req.params;
+    const updated = await dataStore.updateOffer(id, { published: true, active: true, archived: false });
+
+    if (!updated) return res.status(404).json({ success: false, message: 'Offer not found.' });
+
+    res.json({
+      success: true,
+      message: 'Offer published to live website.',
+      data: updated,
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const unpublishOffer = async (req, res, next) => {
+  try {
+    const { id } = req.params;
+    const updated = await dataStore.updateOffer(id, { published: false, active: false });
+
+    if (!updated) return res.status(404).json({ success: false, message: 'Offer not found.' });
+
+    res.json({
+      success: true,
+      message: 'Offer unpublished from live website.',
+      data: updated,
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const archiveOffer = async (req, res, next) => {
+  try {
+    const { id } = req.params;
+    const updated = await dataStore.updateOffer(id, { archived: true, published: false, active: false });
+
+    if (!updated) return res.status(404).json({ success: false, message: 'Offer not found.' });
+
+    res.json({
+      success: true,
+      message: 'Offer moved to archive.',
+      data: updated,
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const restoreOffer = async (req, res, next) => {
+  try {
+    const { id } = req.params;
+    const updated = await dataStore.updateOffer(id, { archived: false, published: true, active: true });
+
+    if (!updated) return res.status(404).json({ success: false, message: 'Offer not found.' });
+
+    res.json({
+      success: true,
+      message: 'Offer restored and published.',
+      data: updated,
     });
   } catch (error) {
     next(error);

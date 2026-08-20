@@ -7,10 +7,67 @@ import GalleryItem from '../models/GalleryItem.js';
 import NewsletterSubscriber from '../models/NewsletterSubscriber.js';
 import ContactMessage from '../models/ContactMessage.js';
 import Inquiry from '../models/Inquiry.js';
+import SiteSettings from '../models/SiteSettings.js';
 import { getDBStatus } from '../config/db.js';
 import { supabaseService } from './supabaseService.js';
 
 // In-Memory Backing Stores
+let memorySettings = {
+  restaurantName: '1522 The Pub — Mumbai',
+  tagline: 'Rooftop Lounge • Craft Cocktails • Heritage Flavors',
+  address: 'Level 2, Goldfinch Hotel, MIDC Central Road, Chakala, Andheri East, Mumbai, Maharashtra 400093',
+  phone: '+91 80 4748 3333',
+  secondaryPhone: '+91 98201 52200',
+  email: 'concierge.mumbai@1522thepub.com',
+  googleMapsUrl: 'https://maps.google.com/?q=1522+The+Pub+Andheri+East+Mumbai',
+  openingHours: {
+    weekday: '12:00 PM – 01:30 AM',
+    weekend: '12:00 PM – 01:30 AM',
+    happyHours: '04:00 PM – 08:00 PM (Monday to Friday)',
+    lastKitchenOrder: '12:45 AM'
+  },
+  socialLinks: {
+    instagram: 'https://instagram.com/1522mumbai',
+    facebook: 'https://facebook.com/1522mumbai',
+    twitter: 'https://twitter.com/1522mumbai',
+    youtube: 'https://youtube.com'
+  },
+  hero: {
+    eyebrow: 'ANDHERI EAST • ROOFTOP SKY DECK',
+    heading: 'Where Mumbai’s Skyline Meets Crafted Mixology',
+    subheading: 'An open-air rooftop sanctuary perched above Andheri East. Artisanal cocktails, legendary Kundapur ghee roasts, and soulful live music under the stars.',
+    primaryButtonText: 'Reserve a Table',
+    primaryButtonLink: '/reservations',
+    secondaryButtonText: 'Explore Menu',
+    secondaryButtonLink: '/menu',
+    mediaType: 'image',
+    mediaUrl: 'https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?auto=format&fit=crop&w=1920&q=80',
+    published: true
+  },
+  story: {
+    eyebrow: 'OUR HERITAGE & PASSION',
+    heading: 'Born in Bangalore. Reimagined for the Mumbai Sky.',
+    subtitle: 'A decade-long legacy of rock, nostalgia, and progressive coastal gastronomy.',
+    paragraphs: [
+      'Founded with a pure love for good rock music, cold draught beers, and unapologetically bold flavors, 1522 began as a legendary neighborhood pub in Bengaluru before bringing its distinctive energy to Mumbai’s financial heart in Andheri East.',
+      'At our expansive rooftop deck at the Goldfinch Hotel, we blend classic pub hospitality with progressive coastal culinary craftsmanship. From the smoky notes of our Applewood Bourbon Old Fashioned to our 48-hour slow-cooked Mangalorean Ghee Roast, every element is curated to create unforgettable evenings.'
+    ],
+    stats: [
+      { value: '12+', label: 'Years of Heritage' },
+      { value: '35+', label: 'Signature Mixes' },
+      { value: '4.8★', label: 'Guest Rating' },
+      { value: '250+', label: 'Rooftop Capacity' }
+    ],
+    imageUrl: 'https://images.unsplash.com/photo-1578474846511-04ba529f0b88?auto=format&fit=crop&w=1200&q=80',
+    published: true
+  },
+  seo: {
+    metaTitle: '1522 The Pub Mumbai — Premier Rooftop Bar & Kitchen in Andheri East',
+    metaDescription: 'Experience 1522 Mumbai: Andheri East’s premier rooftop pub with craft cocktails, Mangalorean ghee roast, live music, and starlit open-air sky deck dining.',
+    keywords: ['1522 Mumbai', 'Rooftop Pub Andheri', 'Cocktail Bar Andheri East', 'Goldfinch Hotel Pub', 'Mangalorean Ghee Roast']
+  }
+};
+
 let memoryReservations = [
   {
     _id: 'res_sample_1',
@@ -29,6 +86,8 @@ let memoryReservations = [
     specialRequest: 'Corner table with Mumbai skyline view, celebrating promotion',
     specialRequests: 'Corner table with Mumbai skyline view, celebrating promotion',
     status: 'confirmed',
+    published: true,
+    archived: false,
     createdAt: new Date('2026-08-18T10:00:00Z'),
     updatedAt: new Date('2026-08-18T10:00:00Z')
   },
@@ -49,6 +108,8 @@ let memoryReservations = [
     specialRequest: 'Candlelight setup with complimentary sparkling mocktail',
     specialRequests: 'Candlelight setup with complimentary sparkling mocktail',
     status: 'confirmed',
+    published: true,
+    archived: false,
     createdAt: new Date('2026-08-18T11:30:00Z'),
     updatedAt: new Date('2026-08-18T11:30:00Z')
   }
@@ -57,6 +118,8 @@ let memoryReservations = [
 let memoryMenuItems = initialMenuItems.map((item, index) => ({
   _id: `menu_${index + 1}`,
   ...item,
+  published: true,
+  archived: false,
   createdAt: new Date(),
   updatedAt: new Date()
 }));
@@ -64,6 +127,8 @@ let memoryMenuItems = initialMenuItems.map((item, index) => ({
 let memoryEvents = initialEvents.map((evt, index) => ({
   _id: `evt_${index + 1}`,
   ...evt,
+  published: true,
+  archived: false,
   createdAt: new Date(),
   updatedAt: new Date()
 }));
@@ -71,6 +136,8 @@ let memoryEvents = initialEvents.map((evt, index) => ({
 let memoryOffers = initialOffers.map((offer, index) => ({
   _id: `offer_${index + 1}`,
   ...offer,
+  published: true,
+  archived: false,
   createdAt: new Date(),
   updatedAt: new Date()
 }));
@@ -78,6 +145,8 @@ let memoryOffers = initialOffers.map((offer, index) => ({
 let memoryGalleryItems = initialGalleryItems.map((item, index) => ({
   _id: `gallery_${index + 1}`,
   ...item,
+  published: true,
+  archived: false,
   createdAt: new Date(),
   updatedAt: new Date()
 }));
@@ -100,30 +169,81 @@ let memoryMessages = [
     phone: '+91 98920 11223',
     message: 'Looking to organize an exclusive rooftop sundowner mixer for 60 people next month.',
     status: 'unread',
+    archived: false,
     createdAt: new Date('2026-08-18T12:00:00Z'),
     updatedAt: new Date('2026-08-18T12:00:00Z')
   }
 ];
 
 let memoryInquiries = [];
-let memoryReviews = [...initialReviews];
 
 export const dataStore = {
+  // =========================================================================
+  // 0. SETTINGS & CMS
+  // =========================================================================
+  async getSettings() {
+    if (getDBStatus()) {
+      try {
+        let settings = await SiteSettings.findOne();
+        if (!settings) {
+          settings = await SiteSettings.create(memorySettings);
+        }
+        return settings;
+      } catch (err) {
+        console.warn('DB error getSettings, using memory:', err.message);
+      }
+    }
+    return memorySettings;
+  },
+
+  async updateSettings(updateData) {
+    if (getDBStatus()) {
+      try {
+        let settings = await SiteSettings.findOne();
+        if (!settings) {
+          settings = await SiteSettings.create({ ...memorySettings, ...updateData });
+        } else {
+          Object.assign(settings, updateData);
+          await settings.save();
+        }
+        memorySettings = { ...memorySettings, ...updateData };
+        return settings;
+      } catch (err) {
+        console.warn('DB error updateSettings:', err.message);
+      }
+    }
+    memorySettings = { ...memorySettings, ...updateData };
+    return memorySettings;
+  },
+
+  // =========================================================================
   // 1. RESERVATIONS
+  // =========================================================================
   async getAllReservations(filters = {}) {
+    const { status, date, archived, includeArchived } = filters;
     if (getDBStatus()) {
       try {
         const query = {};
-        if (filters.status) query.status = filters.status;
-        if (filters.date) query.date = filters.date;
+        if (status) query.status = status;
+        if (date) query.date = date;
+        if (!includeArchived) {
+          query.archived = archived === true || archived === 'true' ? true : { $ne: true };
+        }
         return await Reservation.find(query).sort({ createdAt: -1 });
       } catch (err) {
         console.warn('DB error fetching reservations, using memory fallback:', err.message);
       }
     }
     let res = [...memoryReservations];
-    if (filters.status) res = res.filter(r => r.status === filters.status);
-    if (filters.date) res = res.filter(r => r.date === filters.date);
+    if (status) res = res.filter(r => r.status === status);
+    if (date) res = res.filter(r => r.date === date);
+    if (!includeArchived) {
+      if (archived === true || archived === 'true') {
+        res = res.filter(r => r.archived === true);
+      } else {
+        res = res.filter(r => !r.archived);
+      }
+    }
     return res.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
   },
 
@@ -147,7 +267,7 @@ export const dataStore = {
         console.warn('DB error getReservationByReference:', err.message);
       }
     }
-    return memoryReservations.find(r => r.bookingReference.toLowerCase() === reference.toLowerCase()) || null;
+    return memoryReservations.find(r => r.bookingReference?.toLowerCase() === reference.toLowerCase()) || null;
   },
 
   async createReservation(data) {
@@ -163,7 +283,9 @@ export const dataStore = {
       specialRequest: data.specialRequest || data.specialRequests || '',
       specialRequests: data.specialRequest || data.specialRequests || '',
       bookingReference: reference,
-      status: 'confirmed',
+      status: data.status || 'confirmed',
+      published: true,
+      archived: false,
       createdAt: new Date(),
       updatedAt: new Date()
     };
@@ -219,53 +341,61 @@ export const dataStore = {
   },
 
   async deleteReservation(id) {
-    if (getDBStatus()) {
-      try {
-        const deleted = await Reservation.findByIdAndDelete(id);
-        if (deleted) return true;
-      } catch (err) {
-        console.warn('DB error deleteReservation:', err.message);
-      }
-    }
-    const lenBefore = memoryReservations.length;
-    memoryReservations = memoryReservations.filter(r => r._id !== id && r.bookingReference !== id);
-    return memoryReservations.length < lenBefore;
+    return this.updateReservation(id, { archived: true });
   },
 
+  // =========================================================================
   // 2. MENU ITEMS
+  // =========================================================================
   async getAllMenuItems(query = {}) {
-    const { category, dietary, search, available } = query;
-    // 1. Try Supabase
-    const spItems = await supabaseService.getMenuItems(query);
-    if (spItems && spItems.length > 0) return spItems;
+    const { category, dietary, search, available, published, archived, includeArchived } = query;
 
-    // 2. Try MongoDB if connected
+    // 1. Try MongoDB if connected
     if (getDBStatus()) {
       try {
         const filter = {};
-        if (category && category !== 'all') filter.category = category;
+        if (category && category !== 'all') {
+          if (category === 'Food') {
+            filter.category = 'Food';
+          } else if (category === 'Drinks' || category === 'Cocktails') {
+            filter.category = { $in: ['Cocktails', 'Beer', 'Wine', 'Non-Alcoholic', 'craft-cocktails', 'single-malts-wines'] };
+          } else {
+            filter.category = category;
+          }
+        }
         if (dietary && dietary !== 'all') filter.dietary = dietary;
         if (available !== undefined) filter.available = available === 'true' || available === true;
+        if (published !== undefined) filter.published = published === 'true' || published === true;
+        if (!includeArchived) {
+          filter.archived = archived === 'true' || archived === true ? true : { $ne: true };
+        }
         if (search) {
           filter.$or = [
             { name: { $regex: search, $options: 'i' } },
             { description: { $regex: search, $options: 'i' } }
           ];
         }
-        const items = await MenuItem.find(filter).sort({ createdAt: -1 });
+        const items = await MenuItem.find(filter).sort({ sortOrder: 1, createdAt: -1 });
         if (items && items.length > 0) return items;
       } catch (err) {
         console.warn('DB error getAllMenuItems, using memory store:', err.message);
       }
     }
 
+    // 2. Memory store
     let items = [...memoryMenuItems];
     if (category && category !== 'all') {
       const catLower = category.toLowerCase();
-      items = items.filter(i => 
-        i.category.toLowerCase() === catLower || 
-        (i.subCategory && i.subCategory.toLowerCase() === catLower)
-      );
+      if (catLower === 'food') {
+        items = items.filter(i => (i.category || '').toLowerCase() === 'food');
+      } else if (catLower === 'drinks') {
+        items = items.filter(i => (i.category || '').toLowerCase() !== 'food');
+      } else {
+        items = items.filter(i => 
+          (i.category || '').toLowerCase() === catLower || 
+          (i.subCategory && i.subCategory.toLowerCase() === catLower)
+        );
+      }
     }
     if (dietary && dietary !== 'all') {
       items = items.filter(i => i.dietary === dietary);
@@ -274,11 +404,22 @@ export const dataStore = {
       const isAvail = available === 'true' || available === true;
       items = items.filter(i => i.available === isAvail);
     }
+    if (published !== undefined) {
+      const isPub = published === 'true' || published === true;
+      items = items.filter(i => (i.published !== undefined ? i.published === isPub : isPub));
+    }
+    if (!includeArchived) {
+      if (archived === true || archived === 'true') {
+        items = items.filter(i => i.archived === true);
+      } else {
+        items = items.filter(i => !i.archived);
+      }
+    }
     if (search) {
       const q = search.toLowerCase();
       items = items.filter(i => 
-        i.name.toLowerCase().includes(q) || 
-        i.description.toLowerCase().includes(q)
+        (i.name || '').toLowerCase().includes(q) || 
+        (i.description || '').toLowerCase().includes(q)
       );
     }
     return items;
@@ -296,20 +437,26 @@ export const dataStore = {
   },
 
   async createMenuItem(data) {
+    const newItemData = {
+      ...data,
+      available: data.available !== undefined ? data.available : true,
+      published: data.published !== undefined ? data.published : true,
+      archived: false,
+      featured: data.featured || data.isChefsSpecial || false,
+      createdAt: new Date(),
+      updatedAt: new Date()
+    };
+
     if (getDBStatus()) {
       try {
-        return await MenuItem.create(data);
+        return await MenuItem.create(newItemData);
       } catch (err) {
         console.warn('DB error createMenuItem:', err.message);
       }
     }
     const newItem = {
       _id: `menu_${Date.now()}`,
-      ...data,
-      available: data.available !== undefined ? data.available : true,
-      featured: data.featured || data.isChefsSpecial || false,
-      createdAt: new Date(),
-      updatedAt: new Date()
+      ...newItemData
     };
     memoryMenuItems.unshift(newItem);
     return newItem;
@@ -337,17 +484,7 @@ export const dataStore = {
   },
 
   async deleteMenuItem(id) {
-    if (getDBStatus()) {
-      try {
-        const deleted = await MenuItem.findByIdAndDelete(id);
-        if (deleted) return true;
-      } catch (err) {
-        console.warn('DB error deleteMenuItem:', err.message);
-      }
-    }
-    const lenBefore = memoryMenuItems.length;
-    memoryMenuItems = memoryMenuItems.filter(m => m._id !== id);
-    return memoryMenuItems.length < lenBefore;
+    return this.updateMenuItem(id, { archived: true, published: false });
   },
 
   async toggleMenuItemAvailability(id) {
@@ -356,24 +493,41 @@ export const dataStore = {
     return this.updateMenuItem(id, { available: !item.available });
   },
 
+  // =========================================================================
   // 3. EVENTS
-  async getAllEvents(includeInactive = false) {
-    // 1. Try Supabase
-    const spEvents = await supabaseService.getEvents();
-    if (spEvents && spEvents.length > 0) return spEvents;
+  // =========================================================================
+  async getAllEvents(query = {}) {
+    const { includeInactive, published, archived, includeArchived } = typeof query === 'boolean' ? { includeInactive: query } : query;
 
-    // 2. Try MongoDB if connected
     if (getDBStatus()) {
       try {
-        const filter = includeInactive ? {} : { active: true };
-        const events = await Event.find(filter).sort({ createdAt: -1 });
+        const filter = {};
+        if (!includeInactive) filter.active = true;
+        if (published !== undefined) filter.published = published === 'true' || published === true;
+        if (!includeArchived) {
+          filter.archived = archived === 'true' || archived === true ? true : { $ne: true };
+        }
+        const events = await Event.find(filter).sort({ date: 1, createdAt: -1 });
         if (events && events.length > 0) return events;
       } catch (err) {
         console.warn('DB error getAllEvents:', err.message);
       }
     }
-    if (includeInactive) return memoryEvents;
-    return memoryEvents.filter(e => e.active !== false);
+
+    let list = [...memoryEvents];
+    if (!includeInactive) list = list.filter(e => e.active !== false);
+    if (published !== undefined) {
+      const isPub = published === 'true' || published === true;
+      list = list.filter(e => (e.published !== undefined ? e.published === isPub : isPub));
+    }
+    if (!includeArchived) {
+      if (archived === true || archived === 'true') {
+        list = list.filter(e => e.archived === true);
+      } else {
+        list = list.filter(e => !e.archived);
+      }
+    }
+    return list;
   },
 
   async getEventById(id) {
@@ -388,20 +542,26 @@ export const dataStore = {
   },
 
   async createEvent(data) {
+    const newEventData = {
+      ...data,
+      rsvpCount: 0,
+      active: data.active !== undefined ? data.active : true,
+      published: data.published !== undefined ? data.published : true,
+      archived: false,
+      createdAt: new Date(),
+      updatedAt: new Date()
+    };
+
     if (getDBStatus()) {
       try {
-        return await Event.create(data);
+        return await Event.create(newEventData);
       } catch (err) {
         console.warn('DB error createEvent:', err.message);
       }
     }
     const newEvt = {
       _id: `evt_${Date.now()}`,
-      rsvpCount: 0,
-      active: true,
-      ...data,
-      createdAt: new Date(),
-      updatedAt: new Date()
+      ...newEventData
     };
     memoryEvents.unshift(newEvt);
     return newEvt;
@@ -429,17 +589,7 @@ export const dataStore = {
   },
 
   async deleteEvent(id) {
-    if (getDBStatus()) {
-      try {
-        const deleted = await Event.findByIdAndDelete(id);
-        if (deleted) return true;
-      } catch (err) {
-        console.warn('DB error deleteEvent:', err.message);
-      }
-    }
-    const lenBefore = memoryEvents.length;
-    memoryEvents = memoryEvents.filter(e => e._id !== id);
-    return memoryEvents.length < lenBefore;
+    return this.updateEvent(id, { archived: true, published: false, active: false });
   },
 
   async rsvpEvent(eventId) {
@@ -449,19 +599,24 @@ export const dataStore = {
     return this.updateEvent(eventId, { rsvpCount: newCount });
   },
 
-  // 4. OFFERS & SPECIAL NEWS
-  async getAllOffers(includeExpired = false) {
-    // 1. Try Supabase
-    const spOffers = await supabaseService.getOffers();
-    if (spOffers && spOffers.length > 0) return spOffers;
-
-    // 2. Try MongoDB if connected
+  // =========================================================================
+  // 4. OFFERS
+  // =========================================================================
+  async getAllOffers(query = {}) {
+    const { includeExpired, published, archived, includeArchived } = typeof query === 'boolean' ? { includeExpired: query } : query;
     const now = new Date();
+
     if (getDBStatus()) {
       try {
-        const filter = includeExpired 
-          ? {} 
-          : { active: true, endDate: { $gte: now } };
+        const filter = {};
+        if (!includeExpired) {
+          filter.active = true;
+          filter.endDate = { $gte: now };
+        }
+        if (published !== undefined) filter.published = published === 'true' || published === true;
+        if (!includeArchived) {
+          filter.archived = archived === 'true' || archived === true ? true : { $ne: true };
+        }
         const offers = await Offer.find(filter).sort({ createdAt: -1 });
         if (offers && offers.length > 0) return offers;
       } catch (err) {
@@ -469,11 +624,25 @@ export const dataStore = {
       }
     }
 
-    if (includeExpired) return memoryOffers;
-    return memoryOffers.filter(o => {
-      const notExpired = !o.endDate || new Date(o.endDate) >= now;
-      return o.active !== false && notExpired;
-    });
+    let list = [...memoryOffers];
+    if (!includeExpired) {
+      list = list.filter(o => {
+        const notExpired = !o.endDate || new Date(o.endDate) >= now;
+        return o.active !== false && notExpired;
+      });
+    }
+    if (published !== undefined) {
+      const isPub = published === 'true' || published === true;
+      list = list.filter(o => (o.published !== undefined ? o.published === isPub : isPub));
+    }
+    if (!includeArchived) {
+      if (archived === true || archived === 'true') {
+        list = list.filter(o => o.archived === true);
+      } else {
+        list = list.filter(o => !o.archived);
+      }
+    }
+    return list;
   },
 
   async getOfferById(id) {
@@ -488,20 +657,26 @@ export const dataStore = {
   },
 
   async createOffer(data) {
+    const newOfferData = {
+      ...data,
+      active: data.active !== undefined ? data.active : true,
+      published: data.published !== undefined ? data.published : true,
+      archived: false,
+      startDate: data.startDate || new Date(),
+      createdAt: new Date(),
+      updatedAt: new Date()
+    };
+
     if (getDBStatus()) {
       try {
-        return await Offer.create(data);
+        return await Offer.create(newOfferData);
       } catch (err) {
         console.warn('DB error createOffer:', err.message);
       }
     }
     const newOffer = {
       _id: `offer_${Date.now()}`,
-      active: true,
-      startDate: new Date(),
-      ...data,
-      createdAt: new Date(),
-      updatedAt: new Date()
+      ...newOfferData
     };
     memoryOffers.unshift(newOffer);
     return newOffer;
@@ -529,26 +704,15 @@ export const dataStore = {
   },
 
   async deleteOffer(id) {
-    if (getDBStatus()) {
-      try {
-        const deleted = await Offer.findByIdAndDelete(id);
-        if (deleted) return true;
-      } catch (err) {
-        console.warn('DB error deleteOffer:', err.message);
-      }
-    }
-    const lenBefore = memoryOffers.length;
-    memoryOffers = memoryOffers.filter(o => o._id !== id);
-    return memoryOffers.length < lenBefore;
+    return this.updateOffer(id, { archived: true, published: false, active: false });
   },
 
+  // =========================================================================
   // 5. GALLERY ITEMS
-  async getAllGalleryItems(category = 'All') {
-    // 1. Try Supabase
-    const spGallery = await supabaseService.getGalleryItems({ category });
-    if (spGallery && spGallery.length > 0) return spGallery;
+  // =========================================================================
+  async getAllGalleryItems(query = {}) {
+    const { category, published, archived, includeArchived } = typeof query === 'string' ? { category: query } : query;
 
-    // 2. Try MongoDB if connected
     if (getDBStatus()) {
       try {
         let filter = {};
@@ -559,6 +723,10 @@ export const dataStore = {
             filter.category = category;
           }
         }
+        if (published !== undefined) filter.published = published === 'true' || published === true;
+        if (!includeArchived) {
+          filter.archived = archived === 'true' || archived === true ? true : { $ne: true };
+        }
         const items = await GalleryItem.find(filter).sort({ order: 1, createdAt: -1 });
         if (items && items.length > 0) return items;
       } catch (err) {
@@ -566,13 +734,26 @@ export const dataStore = {
       }
     }
 
+    let items = [...memoryGalleryItems];
     if (category && category !== 'All') {
       if (category === 'Food & Drink' || category.toLowerCase() === 'food-drink') {
-        return memoryGalleryItems.filter(item => item.category === 'Food' || item.category === 'Drinks');
+        items = items.filter(item => item.category === 'Food' || item.category === 'Drinks');
+      } else {
+        items = items.filter(item => item.category.toLowerCase() === category.toLowerCase());
       }
-      return memoryGalleryItems.filter(item => item.category.toLowerCase() === category.toLowerCase());
     }
-    return [...memoryGalleryItems].sort((a, b) => (a.order || 0) - (b.order || 0));
+    if (published !== undefined) {
+      const isPub = published === 'true' || published === true;
+      items = items.filter(item => (item.published !== undefined ? item.published === isPub : isPub));
+    }
+    if (!includeArchived) {
+      if (archived === true || archived === 'true') {
+        items = items.filter(item => item.archived === true);
+      } else {
+        items = items.filter(item => !item.archived);
+      }
+    }
+    return items.sort((a, b) => (a.order || 0) - (b.order || 0));
   },
 
   async getGalleryItemById(id) {
@@ -587,19 +768,25 @@ export const dataStore = {
   },
 
   async createGalleryItem(data) {
+    const newItemData = {
+      ...data,
+      order: memoryGalleryItems.length + 1,
+      published: data.published !== undefined ? data.published : true,
+      archived: false,
+      createdAt: new Date(),
+      updatedAt: new Date()
+    };
+
     if (getDBStatus()) {
       try {
-        return await GalleryItem.create(data);
+        return await GalleryItem.create(newItemData);
       } catch (err) {
         console.warn('DB error createGalleryItem:', err.message);
       }
     }
     const newItem = {
       _id: `gallery_${Date.now()}`,
-      order: memoryGalleryItems.length + 1,
-      ...data,
-      createdAt: new Date(),
-      updatedAt: new Date()
+      ...newItemData
     };
     memoryGalleryItems.push(newItem);
     return newItem;
@@ -627,20 +814,12 @@ export const dataStore = {
   },
 
   async deleteGalleryItem(id) {
-    if (getDBStatus()) {
-      try {
-        const deleted = await GalleryItem.findByIdAndDelete(id);
-        if (deleted) return true;
-      } catch (err) {
-        console.warn('DB error deleteGalleryItem:', err.message);
-      }
-    }
-    const lenBefore = memoryGalleryItems.length;
-    memoryGalleryItems = memoryGalleryItems.filter(g => g._id !== id);
-    return memoryGalleryItems.length < lenBefore;
+    return this.updateGalleryItem(id, { archived: true, published: false });
   },
 
+  // =========================================================================
   // 6. NEWSLETTER SUBSCRIBERS
+  // =========================================================================
   async getAllSubscribers() {
     if (getDBStatus()) {
       try {
@@ -698,18 +877,33 @@ export const dataStore = {
     return memorySubscribers.length < lenBefore;
   },
 
+  // =========================================================================
   // 7. CONTACT MESSAGES
-  async getAllContactMessages(status = null) {
+  // =========================================================================
+  async getAllContactMessages(filters = {}) {
+    const { status, archived, includeArchived } = typeof filters === 'string' ? { status: filters } : filters;
     if (getDBStatus()) {
       try {
-        const filter = status ? { status } : {};
-        return await ContactMessage.find(filter).sort({ createdAt: -1 });
+        const query = {};
+        if (status) query.status = status;
+        if (!includeArchived) {
+          query.archived = archived === true || archived === 'true' ? true : { $ne: true };
+        }
+        return await ContactMessage.find(query).sort({ createdAt: -1 });
       } catch (err) {
         console.warn('DB error getAllContactMessages:', err.message);
       }
     }
-    if (status) return memoryMessages.filter(m => m.status === status);
-    return memoryMessages;
+    let list = [...memoryMessages];
+    if (status) list = list.filter(m => m.status === status);
+    if (!includeArchived) {
+      if (archived === true || archived === 'true') {
+        list = list.filter(m => m.archived === true);
+      } else {
+        list = list.filter(m => !m.archived);
+      }
+    }
+    return list;
   },
 
   async getContactMessageById(id) {
@@ -724,19 +918,24 @@ export const dataStore = {
   },
 
   async createContactMessage(data) {
+    const newMsgData = {
+      ...data,
+      status: 'unread',
+      archived: false,
+      createdAt: new Date(),
+      updatedAt: new Date()
+    };
+
     if (getDBStatus()) {
       try {
-        return await ContactMessage.create(data);
+        return await ContactMessage.create(newMsgData);
       } catch (err) {
         console.warn('DB error createContactMessage:', err.message);
       }
     }
     const newMsg = {
       _id: `msg_${Date.now()}`,
-      status: 'unread',
-      ...data,
-      createdAt: new Date(),
-      updatedAt: new Date()
+      ...newMsgData
     };
     memoryMessages.unshift(newMsg);
     return newMsg;
@@ -763,29 +962,48 @@ export const dataStore = {
   async deleteContactMessage(id) {
     if (getDBStatus()) {
       try {
-        const deleted = await ContactMessage.findByIdAndDelete(id);
-        if (deleted) return true;
+        const updated = await ContactMessage.findByIdAndUpdate(id, { archived: true, status: 'archived' }, { new: true });
+        if (updated) return updated;
       } catch (err) {
         console.warn('DB error deleteContactMessage:', err.message);
       }
     }
-    const lenBefore = memoryMessages.length;
-    memoryMessages = memoryMessages.filter(m => m._id !== id);
-    return memoryMessages.length < lenBefore;
+    const msg = memoryMessages.find(m => m._id === id);
+    if (msg) {
+      msg.archived = true;
+      msg.status = 'archived';
+      return msg;
+    }
+    return null;
   },
 
+  // =========================================================================
   // 8. PRIVATE DINING & EVENT INQUIRIES
-  async getAllInquiries(status = null) {
+  // =========================================================================
+  async getAllInquiries(filters = {}) {
+    const { status, archived, includeArchived } = typeof filters === 'string' ? { status: filters } : filters;
     if (getDBStatus()) {
       try {
-        const filter = status ? { status } : {};
-        return await Inquiry.find(filter).sort({ createdAt: -1 });
+        const query = {};
+        if (status) query.status = status;
+        if (!includeArchived) {
+          query.archived = archived === true || archived === 'true' ? true : { $ne: true };
+        }
+        return await Inquiry.find(query).sort({ createdAt: -1 });
       } catch (err) {
         console.warn('DB error getAllInquiries:', err.message);
       }
     }
-    if (status) return memoryInquiries.filter(i => i.status === status);
-    return memoryInquiries;
+    let list = [...memoryInquiries];
+    if (status) list = list.filter(i => i.status === status);
+    if (!includeArchived) {
+      if (archived === true || archived === 'true') {
+        list = list.filter(i => i.archived === true);
+      } else {
+        list = list.filter(i => !i.archived);
+      }
+    }
+    return list;
   },
 
   async getInquiryById(id) {
@@ -800,23 +1018,28 @@ export const dataStore = {
   },
 
   async createInquiry(data) {
+    const newInqData = {
+      ...data,
+      status: 'new',
+      archived: false,
+      createdAt: new Date(),
+      updatedAt: new Date()
+    };
+
     // 1. Try Supabase
-    await supabaseService.createInquiry(data);
+    await supabaseService.createInquiry(newInqData);
 
     // 2. Try MongoDB
     if (getDBStatus()) {
       try {
-        return await Inquiry.create(data);
+        return await Inquiry.create(newInqData);
       } catch (err) {
         console.warn('DB error createInquiry:', err.message);
       }
     }
     const newInquiry = {
       _id: `inq_${Date.now()}`,
-      status: 'new',
-      ...data,
-      createdAt: new Date(),
-      updatedAt: new Date()
+      ...newInqData
     };
     memoryInquiries.unshift(newInquiry);
     return newInquiry;
@@ -843,18 +1066,24 @@ export const dataStore = {
   async deleteInquiry(id) {
     if (getDBStatus()) {
       try {
-        const deleted = await Inquiry.findByIdAndDelete(id);
-        if (deleted) return true;
+        const updated = await Inquiry.findByIdAndUpdate(id, { archived: true, status: 'archived' }, { new: true });
+        if (updated) return updated;
       } catch (err) {
         console.warn('DB error deleteInquiry:', err.message);
       }
     }
-    const lenBefore = memoryInquiries.length;
-    memoryInquiries = memoryInquiries.filter(i => i._id !== id);
-    return memoryInquiries.length < lenBefore;
+    const inq = memoryInquiries.find(i => i._id === id);
+    if (inq) {
+      inq.archived = true;
+      inq.status = 'archived';
+      return inq;
+    }
+    return null;
   },
 
-  // 9. AUTO-SEEDER (Runs on startup for Supabase and MongoDB)
+  // =========================================================================
+  // 9. AUTO-SEEDER
+  // =========================================================================
   async seedDatabaseIfConnected() {
     // 1. Supabase auto-sync and seed
     try {
@@ -869,25 +1098,31 @@ export const dataStore = {
       const menuCount = await MenuItem.countDocuments();
       if (menuCount === 0) {
         console.log('[Database] Seeding Initial Menu Items...');
-        await MenuItem.insertMany(initialMenuItems);
+        await MenuItem.insertMany(initialMenuItems.map(m => ({ ...m, published: true, archived: false })));
       }
 
       const eventCount = await Event.countDocuments();
       if (eventCount === 0) {
         console.log('[Database] Seeding Initial Events...');
-        await Event.insertMany(initialEvents);
+        await Event.insertMany(initialEvents.map(e => ({ ...e, published: true, archived: false })));
       }
 
       const offerCount = await Offer.countDocuments();
       if (offerCount === 0) {
         console.log('[Database] Seeding Initial Offers...');
-        await Offer.insertMany(initialOffers);
+        await Offer.insertMany(initialOffers.map(o => ({ ...o, published: true, archived: false })));
       }
 
       const galleryCount = await GalleryItem.countDocuments();
       if (galleryCount === 0) {
         console.log('[Database] Seeding Initial Gallery Items...');
-        await GalleryItem.insertMany(initialGalleryItems);
+        await GalleryItem.insertMany(initialGalleryItems.map(g => ({ ...g, published: true, archived: false })));
+      }
+
+      const settingsCount = await SiteSettings.countDocuments();
+      if (settingsCount === 0) {
+        console.log('[Database] Seeding Initial Site Settings...');
+        await SiteSettings.create(memorySettings);
       }
       console.log('[Database] Seed validation complete.');
     } catch (err) {

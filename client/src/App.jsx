@@ -21,6 +21,7 @@ import ReservationModal from './components/reservation/ReservationModal';
 import OrderOnlineModal from './components/common/OrderOnlineModal';
 import { NotificationProvider } from './context/NotificationContext';
 import { ReservationProvider } from './context/ReservationContext';
+import { AuthProvider } from './context/AuthContext';
 
 function AppLayout() {
   const [orderModalOpen, setOrderModalOpen] = useState(false);
@@ -71,9 +72,11 @@ export function App() {
   return (
     <BrowserRouter>
       <NotificationProvider>
-        <ReservationProvider>
-          <AppLayout />
-        </ReservationProvider>
+        <AuthProvider>
+          <ReservationProvider>
+            <AppLayout />
+          </ReservationProvider>
+        </AuthProvider>
       </NotificationProvider>
     </BrowserRouter>
   );

@@ -1,11 +1,29 @@
-import React from 'react';
-import { MapPin, Phone, Mail, Clock, Car, Navigation, ShieldCheck, Calendar, Sparkles } from 'lucide-react';
-import SectionHeading from '../components/common/SectionHeading';
+import React, { useState, useEffect } from 'react';
+import { MapPin, Phone, Mail, Clock, Car, Navigation, Calendar } from 'lucide-react';
 import Button from '../components/common/Button';
 import { useReservationModal } from '../context/ReservationContext';
+import { settingsService } from '../services/api';
 
 export const LocationContactSection = () => {
   const { openReservation } = useReservationModal();
+  const [settings, setSettings] = useState({
+    restaurantName: '1522 Bar & Kitchen, Mumbai',
+    address: 'Level 2, Goldfinch Hotel, MIDC Central Road, Near Akruti Center Point, Chakala Industrial Area, Andheri East, Mumbai, Maharashtra 400093.',
+    phone: '+91 98922 83330',
+    secondaryPhone: '+91 98201 44552',
+    email: 'reservations@1522mumbai.com',
+    openingHours: {
+      weekday: '12:00 PM – 01:30 AM',
+      weekend: '12:00 PM – 01:30 AM',
+    },
+    googleMapsUrl: 'https://maps.google.com/?q=1522+Bar+and+Kitchen+Goldfinch+Hotel+Mumbai',
+  });
+
+  useEffect(() => {
+    settingsService.getSettings().then(data => {
+      if (data) setSettings(prev => ({ ...prev, ...data }));
+    }).catch(() => {});
+  }, []);
 
   return (
     <section id="contact" className="py-24 sm:py-32 bg-charcoal-950 text-stone-100 relative overflow-hidden">
@@ -36,10 +54,10 @@ export const LocationContactSection = () => {
                   Prime Andheri East Address
                 </span>
                 <h3 className="font-serif text-2xl text-stone-100 font-normal">
-                  1522 Bar & Kitchen, Mumbai
+                  {settings.restaurantName || '1522 Bar & Kitchen, Mumbai'}
                 </h3>
                 <p className="text-stone-300 text-xs sm:text-sm font-sans mt-2 leading-relaxed">
-                  Level 2, Goldfinch Hotel, MIDC Central Road, Near Akruti Center Point, Chakala Industrial Area, Andheri East, Mumbai, Maharashtra 400093.
+                  {settings.address}
                 </p>
               </div>
 
@@ -52,7 +70,7 @@ export const LocationContactSection = () => {
                   </div>
                   <div>
                     <span className="font-semibold block text-stone-100">Hours of Operation</span>
-                    <span className="text-stone-400 text-[11px]">12:00 PM – 01:30 AM (Open Daily)</span>
+                    <span className="text-stone-400 text-[11px]">{settings.openingHours?.weekday || '12:00 PM – 01:30 AM'} (Open Daily)</span>
                   </div>
                 </div>
 
@@ -64,9 +82,13 @@ export const LocationContactSection = () => {
                   <div>
                     <span className="font-semibold block text-stone-100">Direct Reservations Hotline</span>
                     <div className="flex flex-wrap gap-2 text-[11px] text-terracotta-400">
-                      <a href="tel:+919892283330" className="hover:underline">+91 98922 83330</a>
-                      <span>•</span>
-                      <a href="tel:+919820144552" className="hover:underline">+91 98201 44552</a>
+                      <a href={`tel:${settings.phone}`} className="hover:underline">{settings.phone}</a>
+                      {settings.secondaryPhone && (
+                        <>
+                          <span>•</span>
+                          <a href={`tel:${settings.secondaryPhone}`} className="hover:underline">{settings.secondaryPhone}</a>
+                        </>
+                      )}
                     </div>
                   </div>
                 </div>
@@ -78,8 +100,8 @@ export const LocationContactSection = () => {
                   </div>
                   <div>
                     <span className="font-semibold block text-stone-100">Guest Relations & Corporate</span>
-                    <a href="mailto:reservations@1522mumbai.com" className="text-stone-400 hover:text-stone-200 text-[11px]">
-                      reservations@1522mumbai.com
+                    <a href={`mailto:${settings.email}`} className="text-stone-400 hover:text-stone-200 text-[11px]">
+                      {settings.email}
                     </a>
                   </div>
                 </div>
@@ -124,10 +146,10 @@ export const LocationContactSection = () => {
               <div className="absolute top-4 left-4 bg-charcoal-900/95 backdrop-blur-md border border-stone-700 p-4 rounded-2xl shadow-xl max-w-xs">
                 <div className="flex items-center gap-2 mb-1">
                   <MapPin className="w-4 h-4 text-terracotta-400" />
-                  <span className="font-serif text-sm font-semibold text-stone-100">1522 Bar & Kitchen</span>
+                  <span className="font-serif text-sm font-semibold text-stone-100">{settings.restaurantName || '1522 Bar & Kitchen'}</span>
                 </div>
                 <p className="text-[10px] text-stone-300 font-sans">
-                  Goldfinch Hotel, Level 2, MIDC Central Rd, Andheri (E)
+                  {settings.address}
                 </p>
                 <div className="mt-2 pt-2 border-t border-stone-800 text-[10px] text-stone-400 font-sans flex items-center gap-2">
                   <span className="text-emerald-400 font-bold">● Open Now</span>
@@ -146,7 +168,7 @@ export const LocationContactSection = () => {
               </div>
               
               <a
-                href="https://maps.google.com/?q=1522+Bar+and+Kitchen+Goldfinch+Hotel+Mumbai"
+                href={settings.googleMapsUrl || 'https://maps.google.com/?q=1522+Bar+and+Kitchen+Goldfinch+Hotel+Mumbai'}
                 target="_blank"
                 rel="noreferrer"
                 className="px-5 py-3 rounded-xl bg-charcoal-750 hover:bg-charcoal-700 text-terracotta-400 hover:text-terracotta-300 border border-stone-700 font-semibold uppercase tracking-wider text-[11px] shrink-0 transition-colors flex items-center gap-2 shadow-sm"

@@ -71,6 +71,14 @@ const eventSchema = new mongoose.Schema(
       type: Boolean,
       default: true,
     },
+    published: {
+      type: Boolean,
+      default: true,
+    },
+    archived: {
+      type: Boolean,
+      default: false,
+    },
     rsvpCount: {
       type: Number,
       default: 0,

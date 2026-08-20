@@ -46,8 +46,12 @@ const inquirySchema = new mongoose.Schema({
   },
   status: {
     type: String,
-    enum: ['new', 'in-review', 'quoted', 'confirmed', 'declined'],
+    enum: ['new', 'in-review', 'quoted', 'confirmed', 'declined', 'archived'],
     default: 'new',
+  },
+  archived: {
+    type: Boolean,
+    default: false,
   },
   createdAt: {
     type: Date,

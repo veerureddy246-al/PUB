@@ -182,14 +182,15 @@ export const updateReservationStatus = async (req, res, next) => {
     const { id } = req.params;
     const { status } = req.body;
 
-    if (!['confirmed', 'seated', 'completed', 'cancelled'].includes(status)) {
+    const allowed = ['pending', 'confirmed', 'seated', 'completed', 'cancelled'];
+    if (!allowed.includes(status?.toLowerCase())) {
       return res.status(400).json({
         success: false,
-        message: 'Invalid reservation status. Allowed: confirmed, seated, completed, cancelled.'
+        message: 'Invalid reservation status. Allowed: pending, confirmed, seated, completed, cancelled.'
       });
     }
 
-    const updated = await dataStore.updateReservationStatus(id, status);
+    const updated = await dataStore.updateReservationStatus(id, status.toLowerCase());
     if (!updated) {
       return res.status(404).json({ success: false, message: 'Reservation not found.' });
     }
@@ -207,9 +208,9 @@ export const updateReservationStatus = async (req, res, next) => {
 export const deleteReservation = async (req, res, next) => {
   try {
     const { id } = req.params;
-    const deleted = await dataStore.deleteReservation(id);
+    const updated = await dataStore.updateReservation(id, { archived: true });
 
-    if (!deleted) {
+    if (!updated) {
       return res.status(404).json({
         success: false,
         message: 'Reservation not found or already removed.'
@@ -218,7 +219,8 @@ export const deleteReservation = async (req, res, next) => {
 
     res.json({
       success: true,
-      message: 'Reservation deleted successfully.'
+      message: 'Reservation archived successfully.',
+      data: updated
     });
   } catch (error) {
     next(error);

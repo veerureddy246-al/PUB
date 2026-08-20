@@ -2,12 +2,17 @@ import { dataStore } from '../services/dataStore.js';
 
 export const getEvents = async (req, res, next) => {
   try {
-    const { includeInactive } = req.query;
-    const events = await dataStore.getAllEvents(includeInactive === 'true');
+    const { includeInactive, published, archived, includeArchived } = req.query;
+    const events = await dataStore.getAllEvents({
+      includeInactive: includeInactive === 'true' || includeInactive === true,
+      published,
+      archived,
+      includeArchived: includeArchived === 'true' || includeArchived === true,
+    });
     res.json({
       success: true,
       count: events.length,
-      data: events
+      data: events,
     });
   } catch (error) {
     next(error);
@@ -22,13 +27,13 @@ export const getEventById = async (req, res, next) => {
     if (!event) {
       return res.status(404).json({
         success: false,
-        message: 'Event not found.'
+        message: 'Event not found.',
       });
     }
 
     res.json({
       success: true,
-      data: event
+      data: event,
     });
   } catch (error) {
     next(error);
@@ -52,13 +57,14 @@ export const createEvent = async (req, res, next) => {
       deck,
       coverCharge,
       featured,
-      active
+      active,
+      published,
     } = req.body;
 
     if (!title || !description || !date || (!time && !timing) || !image) {
       return res.status(400).json({
         success: false,
-        message: 'Validation failed: title, description, date, time, and image are required.'
+        message: 'Validation failed: title, description, date, time, and image are required.',
       });
     }
 
@@ -77,13 +83,15 @@ export const createEvent = async (req, res, next) => {
       deck: deck || 'Upper Sky Deck (Open Air)',
       coverCharge: coverCharge || 'Free Entry • Prior Table Reservation Recommended',
       featured: featured !== undefined ? featured : false,
-      active: active !== undefined ? active : true
+      active: active !== undefined ? active : true,
+      published: published !== undefined ? published : true,
+      archived: false,
     });
 
     res.status(201).json({
       success: true,
       message: 'Event scheduled successfully.',
-      data: newEvent
+      data: newEvent,
     });
   } catch (error) {
     next(error);
@@ -98,14 +106,14 @@ export const updateEvent = async (req, res, next) => {
     if (!updated) {
       return res.status(404).json({
         success: false,
-        message: 'Event not found.'
+        message: 'Event not found.',
       });
     }
 
     res.json({
       success: true,
       message: 'Event updated successfully.',
-      data: updated
+      data: updated,
     });
   } catch (error) {
     next(error);
@@ -115,18 +123,87 @@ export const updateEvent = async (req, res, next) => {
 export const deleteEvent = async (req, res, next) => {
   try {
     const { id } = req.params;
-    const deleted = await dataStore.deleteEvent(id);
+    const updated = await dataStore.updateEvent(id, { archived: true, published: false, active: false });
 
-    if (!deleted) {
+    if (!updated) {
       return res.status(404).json({
         success: false,
-        message: 'Event not found or already deleted.'
+        message: 'Event not found or already deleted.',
       });
     }
 
     res.json({
       success: true,
-      message: 'Event deleted successfully.'
+      message: 'Event archived successfully.',
+      data: updated,
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const publishEvent = async (req, res, next) => {
+  try {
+    const { id } = req.params;
+    const updated = await dataStore.updateEvent(id, { published: true, active: true, archived: false });
+
+    if (!updated) return res.status(404).json({ success: false, message: 'Event not found.' });
+
+    res.json({
+      success: true,
+      message: 'Event published to live website.',
+      data: updated,
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const unpublishEvent = async (req, res, next) => {
+  try {
+    const { id } = req.params;
+    const updated = await dataStore.updateEvent(id, { published: false, active: false });
+
+    if (!updated) return res.status(404).json({ success: false, message: 'Event not found.' });
+
+    res.json({
+      success: true,
+      message: 'Event unpublished from live website.',
+      data: updated,
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const archiveEvent = async (req, res, next) => {
+  try {
+    const { id } = req.params;
+    const updated = await dataStore.updateEvent(id, { archived: true, published: false, active: false });
+
+    if (!updated) return res.status(404).json({ success: false, message: 'Event not found.' });
+
+    res.json({
+      success: true,
+      message: 'Event moved to archive.',
+      data: updated,
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const restoreEvent = async (req, res, next) => {
+  try {
+    const { id } = req.params;
+    const updated = await dataStore.updateEvent(id, { archived: false, published: true, active: true });
+
+    if (!updated) return res.status(404).json({ success: false, message: 'Event not found.' });
+
+    res.json({
+      success: true,
+      message: 'Event restored and published.',
+      data: updated,
     });
   } catch (error) {
     next(error);
@@ -141,14 +218,14 @@ export const rsvpEvent = async (req, res, next) => {
     if (!updated) {
       return res.status(404).json({
         success: false,
-        message: 'Event not found.'
+        message: 'Event not found.',
       });
     }
 
     res.json({
       success: true,
       message: 'RSVP confirmed! We look forward to seeing you at 1522 Mumbai.',
-      data: updated
+      data: updated,
     });
   } catch (error) {
     next(error);

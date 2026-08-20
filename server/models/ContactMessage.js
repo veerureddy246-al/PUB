@@ -36,6 +36,10 @@ const contactMessageSchema = new mongoose.Schema(
       enum: ['unread', 'read', 'replied', 'archived'],
       default: 'unread',
     },
+    archived: {
+      type: Boolean,
+      default: false,
+    },
   },
   {
     timestamps: true,
